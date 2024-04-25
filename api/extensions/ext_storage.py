@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Union
 
 import boto3
+import oss2 as aliyun_s3
 from azure.storage.blob import AccountSasPermissions, BlobServiceClient, ResourceTypes, generate_account_sas
 import oss2 as aliyun_s3
 from botocore.client import Config
