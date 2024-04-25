@@ -1,9 +1,9 @@
 name: Run Unit Test For SDKs
 
-on:
-  pull_request:
-    branches:
-      - main
+on: workflow_dispatch
+  # pull_request:
+  #   branches:
+  #     - main
 jobs:
   build:
     name: unit test for Node.js SDK
