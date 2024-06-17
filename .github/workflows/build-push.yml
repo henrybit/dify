@@ -1,12 +1,6 @@
 name: Build and Push API & Web
 
-on:
-  push:
-    branches:
-      - "main"
-      - "deploy/dev"
-  release:
-    types: [published]
+on: workflow_dispatch
 
 env:
   DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
@@ -17,7 +11,7 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    if: github.repository == 'langgenius/dify'
+    if: github.repository == 'henrybit/dify'
     strategy:
       matrix:
         include:
