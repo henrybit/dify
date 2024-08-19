@@ -201,6 +201,7 @@ class WorkflowConverter:
             features=json.dumps(features),
             created_by=account_id,
             environment_variables=[],
+            conversation_variables=[],
         )
 
         db.session.add(workflow)
@@ -589,6 +590,7 @@ class WorkflowConverter:
         Replace Template Variables
         :param template: template
         :param variables: list of variables
+        :param external_data_variable_node_mapping: external data variable node mapping
         :return:
         """
         for v in variables:
