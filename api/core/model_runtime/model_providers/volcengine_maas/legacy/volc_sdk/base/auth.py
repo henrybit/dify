@@ -1,5 +1,6 @@
 # coding : utf-8
 import datetime
+from itertools import starmap
 
 import pytz
 
@@ -48,7 +49,7 @@ class SignResult:
         self.authorization = ""
 
     def __str__(self):
-        return "\n".join(["{}:{}".format(*item) for item in self.__dict__.items()])
+        return "\n".join(list(starmap("{}:{}".format, self.__dict__.items())))
 
 
 class Credentials:
@@ -74,7 +75,7 @@ class Signer:
     def sign(request, credentials):
         if request.path == "":
             request.path = "/"
-        if request.method != "GET" and not ("Content-Type" in request.headers):
+        if request.method != "GET" and "Content-Type" not in request.headers:
             request.headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
 
         format_date = Signer.get_current_format_date()

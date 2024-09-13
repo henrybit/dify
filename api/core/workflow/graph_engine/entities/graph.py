@@ -86,10 +86,6 @@ class Graph(BaseModel):
             if target_node_id not in reverse_edge_mapping:
                 reverse_edge_mapping[target_node_id] = []
 
-            # is target node id in source node id edge mapping
-            if any(graph_edge.target_node_id == target_node_id for graph_edge in edge_mapping[source_node_id]):
-                continue
-
             target_edge_ids.add(target_node_id)
 
             # parse run condition
@@ -228,9 +224,7 @@ class Graph(BaseModel):
         """
         leaf_node_ids = []
         for node_id in self.node_ids:
-            if node_id not in self.edge_mapping:
-                leaf_node_ids.append(node_id)
-            elif (
+            if node_id not in self.edge_mapping or (
                 len(self.edge_mapping[node_id]) == 1
                 and self.edge_mapping[node_id][0].target_node_id == self.root_node_id
             ):
@@ -274,7 +268,7 @@ class Graph(BaseModel):
                     f"Node {graph_edge.source_node_id} is connected to the previous node, please check the graph."
                 )
 
-            new_route = route[:]
+            new_route = route.copy()
             new_route.append(graph_edge.target_node_id)
             cls._check_connected_to_previous_node(
                 route=new_route,
@@ -314,7 +308,7 @@ class Graph(BaseModel):
                     parallel_branch_node_ids["default"].append(graph_edge.target_node_id)
                 else:
                     condition_hash = graph_edge.run_condition.hash
-                    if not condition_hash in condition_edge_mappings:
+                    if condition_hash not in condition_edge_mappings:
                         condition_edge_mappings[condition_hash] = []
 
                     condition_edge_mappings[condition_hash].append(graph_edge)
@@ -685,8 +679,7 @@ class Graph(BaseModel):
         all_routes_node_ids = set()
         parallel_start_node_ids: dict[str, list[str]] = {}
         for branch_node_id, node_ids in routes_node_ids.items():
-            for node_id in node_ids:
-                all_routes_node_ids.add(node_id)
+            all_routes_node_ids.update(node_ids)
 
             if branch_node_id in reverse_edge_mapping:
                 for graph_edge in reverse_edge_mapping[branch_node_id]:
