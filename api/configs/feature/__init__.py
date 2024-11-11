@@ -376,7 +376,7 @@ class LoggingConfig(BaseSettings):
 
     LOG_TZ: Optional[str] = Field(
         description="Timezone for log timestamps (e.g., 'America/New_York')",
-        default=None,
+        default="UTC",
     )
 
 
@@ -611,6 +611,11 @@ class DataSetConfig(BaseSettings):
         default=500,
     )
 
+    CREATE_TIDB_SERVICE_JOB_ENABLED: bool = Field(
+        description="Enable or disable create tidb service job",
+        default=False,
+    )
+
 
 class WorkspaceConfig(BaseSettings):
     """
@@ -634,9 +639,14 @@ class IndexingConfig(BaseSettings):
     )
 
 
-class ImageFormatConfig(BaseSettings):
+class VisionFormatConfig(BaseSettings):
     MULTIMODAL_SEND_IMAGE_FORMAT: Literal["base64", "url"] = Field(
         description="Format for sending images in multimodal contexts ('base64' or 'url'), default is base64",
+        default="base64",
+    )
+
+    MULTIMODAL_SEND_VIDEO_FORMAT: Literal["base64", "url"] = Field(
+        description="Format for sending videos in multimodal contexts ('base64' or 'url'), default is base64",
         default="base64",
     )
 
@@ -742,7 +752,7 @@ class FeatureConfig(
     FileAccessConfig,
     FileUploadConfig,
     HttpConfig,
-    ImageFormatConfig,
+    VisionFormatConfig,
     InnerAPIConfig,
     IndexingConfig,
     LoggingConfig,
