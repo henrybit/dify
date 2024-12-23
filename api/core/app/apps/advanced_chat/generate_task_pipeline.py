@@ -22,6 +22,7 @@ from core.app.entities.queue_entities import (
     QueueNodeExceptionEvent,
     QueueNodeFailedEvent,
     QueueNodeInIterationFailedEvent,
+    QueueNodeRetryEvent,
     QueueNodeStartedEvent,
     QueueNodeSucceededEvent,
     QueueParallelBranchRunFailedEvent,
@@ -196,11 +197,11 @@ class AdvancedChatAppGenerateTaskPipeline(BasedGenerateTaskPipeline, WorkflowCyc
                 stream_response=stream_response,
             )
 
-    def _listen_audio_msg(self, publisher, task_id: str):
+    def _listen_audio_msg(self, publisher: AppGeneratorTTSPublisher | None, task_id: str):
         if not publisher:
             return None
-        audio_msg: AudioTrunk = publisher.check_and_get_audio()
-        if audio_msg and audio_msg.status != "finish":
+        audio_msg = publisher.check_and_get_audio()
+        if audio_msg and isinstance(audio_msg, AudioTrunk) and audio_msg.status != "finish":
             return MessageAudioStreamResponse(audio=audio_msg.audio, task_id=task_id)
         return None
 
@@ -221,7 +222,7 @@ class AdvancedChatAppGenerateTaskPipeline(BasedGenerateTaskPipeline, WorkflowCyc
 
         for response in self._process_stream_response(tts_publisher=tts_publisher, trace_manager=trace_manager):
             while True:
-                audio_response = self._listen_audio_msg(tts_publisher, task_id=task_id)
+                audio_response = self._listen_audio_msg(publisher=tts_publisher, task_id=task_id)
                 if audio_response:
                     yield audio_response
                 else:
@@ -323,6 +324,22 @@ class AdvancedChatAppGenerateTaskPipeline(BasedGenerateTaskPipeline, WorkflowCyc
                 workflow_node_execution = self._handle_workflow_node_execution_failed(event)
 
                 response = self._workflow_node_finish_to_stream_response(
+                    event=event,
+                    task_id=self._application_generate_entity.task_id,
+                    workflow_node_execution=workflow_node_execution,
+                )
+
+                if response:
+                    yield response
+            elif isinstance(
+                event,
+                QueueNodeRetryEvent,
+            ):
+                workflow_node_execution = self._handle_workflow_node_execution_retried(
+                    workflow_run=workflow_run, event=event
+                )
+
+                response = self._workflow_node_retry_to_stream_response(
                     event=event,
                     task_id=self._application_generate_entity.task_id,
                     workflow_node_execution=workflow_node_execution,
@@ -494,7 +511,7 @@ class AdvancedChatAppGenerateTaskPipeline(BasedGenerateTaskPipeline, WorkflowCyc
 
                 # only publish tts message at text chunk streaming
                 if tts_publisher:
-                    tts_publisher.publish(message=queue_message)
+                    tts_publisher.publish(queue_message)
 
                 self._task_state.answer += delta_text
                 yield self._message_to_stream_response(
