@@ -58,6 +58,8 @@ from models.workflow import (
     WorkflowRunStatus,
 )
 
+from .exc import WorkflowNodeExecutionNotFoundError, WorkflowRunNotFoundError
+
 
 class WorkflowCycleManage:
     _application_generate_entity: Union[AdvancedChatAppGenerateEntity, WorkflowAppGenerateEntity]
@@ -91,7 +93,7 @@ class WorkflowCycleManage:
         )
 
         # handle special values
-        inputs = WorkflowEntry.handle_special_values(inputs)
+        inputs = dict(WorkflowEntry.handle_special_values(inputs) or {})
 
         # init workflow run
         with Session(db.engine, expire_on_commit=False) as session:
@@ -190,7 +192,7 @@ class WorkflowCycleManage:
         """
         workflow_run = self._refetch_workflow_run(workflow_run.id)
 
-        outputs = WorkflowEntry.handle_special_values(outputs)
+        outputs = WorkflowEntry.handle_special_values(dict(outputs) if outputs else None)
 
         workflow_run.status = WorkflowRunStatus.PARTIAL_SUCCESSED.value
         workflow_run.outputs = json.dumps(outputs or {})
@@ -498,7 +500,7 @@ class WorkflowCycleManage:
                 id=workflow_run.id,
                 workflow_id=workflow_run.workflow_id,
                 sequence_number=workflow_run.sequence_number,
-                inputs=workflow_run.inputs_dict,
+                inputs=dict(workflow_run.inputs_dict or {}),
                 created_at=int(workflow_run.created_at.timestamp()),
             ),
         )
@@ -543,7 +545,7 @@ class WorkflowCycleManage:
                 workflow_id=workflow_run.workflow_id,
                 sequence_number=workflow_run.sequence_number,
                 status=workflow_run.status,
-                outputs=workflow_run.outputs_dict,
+                outputs=dict(workflow_run.outputs_dict) if workflow_run.outputs_dict else None,
                 error=workflow_run.error,
                 elapsed_time=workflow_run.elapsed_time,
                 total_tokens=workflow_run.total_tokens,
@@ -551,7 +553,7 @@ class WorkflowCycleManage:
                 created_by=created_by,
                 created_at=int(workflow_run.created_at.timestamp()),
                 finished_at=int(workflow_run.finished_at.timestamp()),
-                files=self._fetch_files_from_node_outputs(workflow_run.outputs_dict),
+                files=self._fetch_files_from_node_outputs(dict(workflow_run.outputs_dict)),
                 exceptions_count=workflow_run.exceptions_count,
             ),
         )
@@ -653,7 +655,7 @@ class WorkflowCycleManage:
         event: QueueNodeRetryEvent,
         task_id: str,
         workflow_node_execution: WorkflowNodeExecution,
-    ) -> Optional[NodeFinishStreamResponse]:
+    ) -> Optional[Union[NodeRetryStreamResponse, NodeFinishStreamResponse]]:
         """
         Workflow node finish to stream response.
         :param event: queue node succeeded or failed event
@@ -836,7 +838,7 @@ class WorkflowCycleManage:
             ),
         )
 
-    def _fetch_files_from_node_outputs(self, outputs_dict: dict) -> Sequence[Mapping[str, Any]]:
+    def _fetch_files_from_node_outputs(self, outputs_dict: Mapping[str, Any]) -> Sequence[Mapping[str, Any]]:
         """
         Fetch files from node outputs
         :param outputs_dict: node outputs dict
@@ -849,9 +851,11 @@ class WorkflowCycleManage:
         # Remove None
         files = [file for file in files if file]
         # Flatten list
-        files = [file for sublist in files for file in sublist]
+        # Flatten the list of sequences into a single list of mappings
+        flattened_files = [file for sublist in files if sublist for file in sublist]
 
-        return files
+        # Convert to tuple to match Sequence type
+        return tuple(flattened_files)
 
     def _fetch_files_from_variable_value(self, value: Union[dict, list]) -> Sequence[Mapping[str, Any]]:
         """
@@ -889,6 +893,8 @@ class WorkflowCycleManage:
         elif isinstance(value, File):
             return value.to_dict()
 
+        return None
+
     def _refetch_workflow_run(self, workflow_run_id: str) -> WorkflowRun:
         """
         Refetch workflow run
@@ -898,7 +904,7 @@ class WorkflowCycleManage:
         workflow_run = db.session.query(WorkflowRun).filter(WorkflowRun.id == workflow_run_id).first()
 
         if not workflow_run:
-            raise Exception(f"Workflow run not found: {workflow_run_id}")
+            raise WorkflowRunNotFoundError(workflow_run_id)
 
         return workflow_run
 
@@ -911,6 +917,6 @@ class WorkflowCycleManage:
         workflow_node_execution = self._wip_workflow_node_executions.get(node_execution_id)
 
         if not workflow_node_execution:
-            raise Exception(f"Workflow node execution not found: {node_execution_id}")
+            raise WorkflowNodeExecutionNotFoundError(node_execution_id)
 
         return workflow_node_execution
