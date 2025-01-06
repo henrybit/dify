@@ -488,6 +488,11 @@ class AuthConfig(BaseSettings):
         default=60,
     )
 
+    REFRESH_TOKEN_EXPIRE_DAYS: PositiveFloat = Field(
+        description="Expiration time for refresh tokens in days",
+        default=30,
+    )
+
     LOGIN_LOCKOUT_DURATION: PositiveInt = Field(
         description="Time (in seconds) a user must wait before retrying login after exceeding the rate limit.",
         default=86400,
@@ -667,6 +672,11 @@ class IndexingConfig(BaseSettings):
         default=4000,
     )
 
+    CHILD_CHUNKS_PREVIEW_NUMBER: PositiveInt = Field(
+        description="Maximum number of child chunks to preview",
+        default=50,
+    )
+
 
 class MultiModalTransferConfig(BaseSettings):
     MULTIMODAL_SEND_FORMAT: Literal["base64", "url"] = Field(
@@ -765,6 +775,13 @@ class LoginConfig(BaseSettings):
     )
 
 
+class AccountConfig(BaseSettings):
+    ACCOUNT_DELETION_TOKEN_EXPIRY_MINUTES: PositiveInt = Field(
+        description="Duration in minutes for which a account deletion token remains valid",
+        default=5,
+    )
+
+
 class FeatureConfig(
     # place the configs in alphabet order
     AppExecutionConfig,
@@ -792,6 +809,7 @@ class FeatureConfig(
     WorkflowNodeExecutionConfig,
     WorkspaceConfig,
     LoginConfig,
+    AccountConfig,
     # hosted services config
     HostedServiceConfig,
     CeleryBeatConfig,
