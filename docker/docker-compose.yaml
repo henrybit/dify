@@ -32,8 +32,9 @@ x-shared-env: &shared-api-worker-env
   APP_MAX_EXECUTION_TIME: ${APP_MAX_EXECUTION_TIME:-1200}
   DIFY_BIND_ADDRESS: ${DIFY_BIND_ADDRESS:-0.0.0.0}
   DIFY_PORT: ${DIFY_PORT:-5001}
-  SERVER_WORKER_AMOUNT: ${SERVER_WORKER_AMOUNT:-}
-  SERVER_WORKER_CLASS: ${SERVER_WORKER_CLASS:-}
+  SERVER_WORKER_AMOUNT: ${SERVER_WORKER_AMOUNT:-1}
+  SERVER_WORKER_CLASS: ${SERVER_WORKER_CLASS:-gevent}
+  SERVER_WORKER_CONNECTIONS: ${SERVER_WORKER_CONNECTIONS:-10}
   CELERY_WORKER_CLASS: ${CELERY_WORKER_CLASS:-}
   GUNICORN_TIMEOUT: ${GUNICORN_TIMEOUT:-360}
   CELERY_WORKER_AMOUNT: ${CELERY_WORKER_AMOUNT:-}
@@ -386,11 +387,12 @@ x-shared-env: &shared-api-worker-env
   CSP_WHITELIST: ${CSP_WHITELIST:-}
   CREATE_TIDB_SERVICE_JOB_ENABLED: ${CREATE_TIDB_SERVICE_JOB_ENABLED:-false}
   MAX_SUBMIT_COUNT: ${MAX_SUBMIT_COUNT:-100}
+  TOP_K_MAX_VALUE: ${TOP_K_MAX_VALUE:-10}
 
 services:
   # API service
   api:
-    image: langgenius/dify-api:0.14.2
+    image: langgenius/dify-api:0.15.0
     restart: always
     environment:
       # Use the shared environment variables.
@@ -413,7 +415,7 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: langgenius/dify-api:0.14.2
+    image: langgenius/dify-api:0.15.0
     restart: always
     environment:
       # Use the shared environment variables.
@@ -435,7 +437,7 @@ services:
 
   # Frontend web application.
   web:
-    image: langgenius/dify-web:0.14.2
+    image: langgenius/dify-web:0.15.0
     restart: always
     environment:
       CONSOLE_API_URL: ${CONSOLE_API_URL:-}
