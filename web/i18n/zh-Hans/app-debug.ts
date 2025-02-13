@@ -25,7 +25,7 @@ const translation = {
     debugConfig: '调试',
     addFeature: '添加功能',
     automatic: '生成',
-    stopResponding: '停止响应',
+    stopResponding: '我正在思考和回答您的问题。如需提前终止，请点此处~',
     agree: '赞同',
     disagree: '反对',
     cancelAgree: '取消赞同',
