@@ -322,6 +322,7 @@ x-shared-env: &shared-api-worker-env
   SSRF_PROXY_HTTPS_URL: ${SSRF_PROXY_HTTPS_URL:-http://ssrf_proxy:3128}
   LOOP_NODE_MAX_COUNT: ${LOOP_NODE_MAX_COUNT:-100}
   MAX_TOOLS_NUM: ${MAX_TOOLS_NUM:-10}
+  MAX_PARALLEL_LIMIT: ${MAX_PARALLEL_LIMIT:-10}
   TEXT_GENERATION_TIMEOUT_MS: ${TEXT_GENERATION_TIMEOUT_MS:-60000}
   PGUSER: ${PGUSER:-${DB_USERNAME}}
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-${DB_PASSWORD}}
@@ -431,7 +432,7 @@ x-shared-env: &shared-api-worker-env
 services:
   # API service
   api:
-    image: langgenius/dify-api:1.0.1
+    image: langgenius/dify-api:1.1.0
     restart: always
     environment:
       # Use the shared environment variables.
@@ -458,7 +459,7 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: langgenius/dify-api:1.0.1
+    image: langgenius/dify-api:1.1.0
     restart: always
     environment:
       # Use the shared environment variables.
@@ -482,7 +483,7 @@ services:
 
   # Frontend web application.
   web:
-    image: langgenius/dify-web:1.0.1
+    image: langgenius/dify-web:1.1.0
     restart: always
     environment:
       CONSOLE_API_URL: ${CONSOLE_API_URL:-}
@@ -498,6 +499,7 @@ services:
       PM2_INSTANCES: ${PM2_INSTANCES:-2}
       LOOP_NODE_MAX_COUNT: ${LOOP_NODE_MAX_COUNT:-100}
       MAX_TOOLS_NUM: ${MAX_TOOLS_NUM:-10}
+      MAX_PARALLEL_LIMIT: ${MAX_PARALLEL_LIMIT:-10}
 
   # The postgres database.
   db:
@@ -561,7 +563,7 @@ services:
 
   # plugin daemon
   plugin_daemon:
-    image: langgenius/dify-plugin-daemon:0.0.4-local
+    image: langgenius/dify-plugin-daemon:0.0.5-local
     restart: always
     environment:
       # Use the shared environment variables.
