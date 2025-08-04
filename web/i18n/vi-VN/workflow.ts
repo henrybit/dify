@@ -222,7 +222,6 @@ const translation = {
   tabs: {
     'tools': 'Công cụ',
     'allTool': 'Tất cả',
-    'builtInTool': 'Tích hợp sẵn',
     'customTool': 'Tùy chỉnh',
     'workflowTool': 'Quy trình làm việc',
     'question-understand': 'Hiểu câu hỏi',
@@ -587,7 +586,6 @@ const translation = {
         'not empty': 'không trống',
         'null': 'là null',
         'not null': 'không là null',
-        'regex match': 'Trận đấu Regex',
         'exists': 'Tồn tại',
         'not exists': 'không tồn tại',
         'not in': 'không có trong',
@@ -932,6 +930,7 @@ const translation = {
       updateSuccess: 'Phiên bản đã được cập nhật',
       restoreSuccess: 'Phiên bản đã được khôi phục',
       restoreFailure: 'Không thể khôi phục phiên bản',
+      copyIdSuccess: 'ID được sao chép vào khay nhớ tạm',
     },
     defaultName: 'Phiên bản không được đặt tên',
     releaseNotesPlaceholder: 'Mô tả những gì đã thay đổi',
@@ -942,6 +941,7 @@ const translation = {
     nameThisVersion: 'Đặt tên cho phiên bản này',
     restorationTip: 'Sau khi phục hồi phiên bản, bản nháp hiện tại sẽ bị ghi đè.',
     title: 'Các phiên bản',
+    copyId: 'Sao chép ID',
   },
   debug: {
     noData: {

@@ -227,7 +227,6 @@ const translation = {
   tabs: {
     'tools': 'Strumenti',
     'allTool': 'Tutti',
-    'builtInTool': 'Integrato',
     'customTool': 'Personalizzato',
     'workflowTool': 'Flusso di lavoro',
     'question-understand': 'Comprensione Domanda',
@@ -606,7 +605,6 @@ const translation = {
         'not empty': 'non è vuoto',
         'null': 'è nullo',
         'not null': 'non è nullo',
-        'regex match': 'Corrispondenza regex',
         'in': 'in',
         'all of': 'tutto di',
         'not in': 'non in',
@@ -958,6 +956,7 @@ const translation = {
       updateSuccess: 'Versione aggiornata',
       deleteFailure: 'Impossibile eliminare la versione',
       updateFailure: 'Impossibile aggiornare la versione',
+      copyIdSuccess: 'ID copiato negli appunti',
     },
     latest: 'Ultimo',
     defaultName: 'Versione senza titolo',
@@ -968,6 +967,7 @@ const translation = {
     currentDraft: 'Bozza attuale',
     restorationTip: 'Dopo il ripristino della versione, la bozza attuale verrà sovrascritta.',
     title: 'Versioni',
+    copyId: 'Copia ID',
   },
   debug: {
     noData: {

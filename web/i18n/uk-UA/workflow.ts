@@ -222,7 +222,6 @@ const translation = {
   tabs: {
     'tools': 'Інструменти',
     'allTool': 'Усі',
-    'builtInTool': 'Вбудовані',
     'customTool': 'Користувацькі',
     'workflowTool': 'Робочий потік',
     'question-understand': 'Розуміння питань',
@@ -587,7 +586,6 @@ const translation = {
         'not empty': 'не порожній',
         'null': 'є null',
         'not null': 'не є null',
-        'regex match': 'Регулярний вираз збігу',
         'in': 'В',
         'all of': 'Всі з',
         'exists': 'Існує',
@@ -932,6 +930,7 @@ const translation = {
       deleteSuccess: 'Версія видалена',
       restoreSuccess: 'Версія відновлена',
       updateFailure: 'Не вдалося оновити версію',
+      copyIdSuccess: 'ID скопійовано в буфер обміну',
     },
     defaultName: 'Без назви версія',
     restorationTip: 'Після відновлення версії нинішній проект буде перезаписано.',
@@ -942,6 +941,7 @@ const translation = {
     editVersionInfo: 'Редагувати інформацію про версію',
     nameThisVersion: 'Назвіть цю версію',
     latest: 'Останні новини',
+    copyId: 'Копіювати ідентифікатор',
   },
   debug: {
     noData: {

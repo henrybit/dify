@@ -108,9 +108,7 @@ const translation = {
     exitVersions: 'Versiones de salida',
     exportJPEG: 'Exportar como JPEG',
     exportPNG: 'Exportar como PNG',
-    referenceVar: 'Variable de referencia',
     publishUpdate: 'Publicar actualización',
-    noExist: 'No existe tal variable',
     exportImage: 'Exportar imagen',
     needAnswerNode: 'Se debe agregar el nodo de respuesta',
     needEndNode: 'Se debe agregar el nodo Final',
@@ -222,7 +220,6 @@ const translation = {
   tabs: {
     'tools': 'Herramientas',
     'allTool': 'Todos',
-    'builtInTool': 'Incorporadas',
     'customTool': 'Personalizadas',
     'workflowTool': 'Flujo de trabajo',
     'question-understand': 'Entender pregunta',
@@ -587,7 +584,6 @@ const translation = {
         'not empty': 'no está vacío',
         'null': 'es nulo',
         'not null': 'no es nulo',
-        'regex match': 'Coincidencia de expresiones regulares',
         'not in': 'no en',
         'in': 'en',
         'exists': 'Existe',
@@ -610,7 +606,6 @@ const translation = {
       },
       select: 'Escoger',
       addSubVariable: 'Sub Variable',
-      condition: 'Condición',
     },
     variableAssigner: {
       title: 'Asignar variables',
@@ -771,9 +766,6 @@ const translation = {
         showAuthor: 'Mostrar autor',
       },
     },
-    tracing: {
-      stopBy: 'Detenido por {{user}}',
-    },
     docExtractor: {
       outputVars: {
         text: 'Texto extraído',
@@ -905,7 +897,7 @@ const translation = {
     },
   },
   tracing: {
-    stopBy: 'Pásate por {{usuario}}',
+    stopBy: 'Pásate por {{user}}',
   },
   variableReference: {
     noAvailableVars: 'No hay variables disponibles',
@@ -935,6 +927,7 @@ const translation = {
       deleteFailure: 'Error al eliminar la versión',
       updateFailure: 'Error al actualizar la versión',
       restoreSuccess: 'Versión restaurada',
+      copyIdSuccess: 'ID copiado en el portapapeles',
     },
     releaseNotesPlaceholder: 'Describe lo que cambió',
     restorationTip: 'Después de la restauración de la versión, el borrador actual será sobrescrito.',
@@ -945,6 +938,7 @@ const translation = {
     currentDraft: 'Borrador Actual',
     editVersionInfo: 'Editar información de la versión',
     latest: 'Último',
+    copyId: 'Copiar ID',
   },
   debug: {
     noData: {

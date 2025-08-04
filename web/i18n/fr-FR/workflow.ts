@@ -222,7 +222,6 @@ const translation = {
   tabs: {
     'tools': 'Outils',
     'allTool': 'Tous',
-    'builtInTool': 'Intégré',
     'customTool': 'Personnalisé',
     'workflowTool': 'Flux de travail',
     'question-understand': 'Compréhension des questions',
@@ -587,7 +586,6 @@ const translation = {
         'not empty': 'n\'est pas vide',
         'null': 'est nul',
         'not null': 'n\'est pas nul',
-        'regex match': 'correspondance regex',
         'in': 'dans',
         'not in': 'pas dans',
         'exists': 'Existe',
@@ -932,6 +930,7 @@ const translation = {
       deleteSuccess: 'Version supprimée',
       updateFailure: 'Échec de la mise à jour de la version',
       restoreFailure: 'Échec de la restauration de la version',
+      copyIdSuccess: 'ID copié dans le presse-papiers',
     },
     title: 'Versions',
     releaseNotesPlaceholder: 'Décrivez ce qui a changé',
@@ -942,6 +941,7 @@ const translation = {
     restorationTip: 'Après la restauration de la version, le brouillon actuel sera écrasé.',
     deletionTip: 'La suppression est irreversible, veuillez confirmer.',
     latest: 'Dernier',
+    copyId: 'Copier l’ID',
   },
   debug: {
     noData: {

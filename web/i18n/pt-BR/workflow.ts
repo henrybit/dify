@@ -222,7 +222,6 @@ const translation = {
   tabs: {
     'tools': 'Ferramentas',
     'allTool': 'Todos',
-    'builtInTool': 'Integrado',
     'customTool': 'Personalizado',
     'workflowTool': 'Fluxo de trabalho',
     'question-understand': 'Compreensão de perguntas',
@@ -587,7 +586,6 @@ const translation = {
         'not empty': 'não está vazio',
         'null': 'é nulo',
         'not null': 'não é nulo',
-        'regex match': 'partida regex',
         'in': 'em',
         'not in': 'não em',
         'exists': 'Existe',
@@ -932,6 +930,7 @@ const translation = {
       restoreFailure: 'Falha ao restaurar versão',
       restoreSuccess: 'Versão restaurada',
       deleteFailure: 'Falha ao deletar versão',
+      copyIdSuccess: 'ID copiado para a área de transferência',
     },
     title: 'Versões',
     latest: 'Último',
@@ -942,6 +941,7 @@ const translation = {
     restorationTip: 'Após a restauração da versão, o rascunho atual será substituído.',
     currentDraft: 'Rascunho Atual',
     deletionTip: 'A exclusão é irreversível, por favor confirme.',
+    copyId: 'Copiar ID',
   },
   debug: {
     noData: {

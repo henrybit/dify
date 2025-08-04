@@ -225,7 +225,6 @@ const translation = {
   tabs: {
     'tools': 'टूल्स',
     'allTool': 'सभी',
-    'builtInTool': 'अंतर्निहित',
     'customTool': 'कस्टम',
     'workflowTool': 'कार्यप्रवाह',
     'question-understand': 'प्रश्न समझ',
@@ -602,7 +601,6 @@ const translation = {
         'not empty': 'खाली नहीं है',
         'null': 'शून्य है',
         'not null': 'शून्य नहीं है',
-        'regex match': 'रेगेक्स मैच',
         'in': 'में',
         'all of': 'के सभी',
         'not exists': 'मौजूद नहीं है',
@@ -952,6 +950,7 @@ const translation = {
       updateSuccess: 'संस्करण अपडेट किया गया',
       updateFailure: 'संस्करण अपडेट करने में विफल',
       restoreFailure: 'संस्करण को पुनर्स्थापित करने में विफल',
+      copyIdSuccess: 'आईडी क्लिपबोर्ड पर कॉपी हो गई',
     },
     latest: 'लेटेस्ट',
     editVersionInfo: 'संस्करण की जानकारी संपादित करें',
@@ -962,6 +961,7 @@ const translation = {
     restorationTip: 'संस्करण पुनर्स्थापन के बाद, वर्तमान ड्राफ्ट अधिलेखित किया जाएगा।',
     defaultName: 'अविभाजित संस्करण',
     deletionTip: 'हटाना अप्रतिबंधी है, कृपया पुष्टि करें।',
+    copyId: 'आईडी कॉपी करें',
   },
   debug: {
     noData: {
