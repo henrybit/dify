@@ -131,6 +131,6 @@ class ForgotPasswordResetApi(Resource):
         return {"result": "success"}
 
 
-api.add_resource(ForgotPasswordSendEmailApi, "/forgot-password")
+#api.add_resource(ForgotPasswordSendEmailApi, "/forgot-password")
 api.add_resource(ForgotPasswordCheckApi, "/forgot-password/validity")
 api.add_resource(ForgotPasswordResetApi, "/forgot-password/resets")
