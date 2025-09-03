@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from core.entities.model_entities import ModelStatus, ModelWithProviderEntity, ProviderModelWithStatusEntity
+from core.entities.model_entities import ModelWithProviderEntity, ProviderModelWithStatusEntity
 from core.model_runtime.entities.model_entities import ModelType, ParameterRule
 from core.model_runtime.model_providers.model_provider_factory import ModelProviderFactory
 from core.provider_manager import ProviderManager
@@ -72,6 +72,7 @@ class ModelProviderService:
 
             provider_config = provider_configuration.custom_configuration.provider
             model_config = provider_configuration.custom_configuration.models
+            can_added_models = provider_configuration.custom_configuration.can_added_models
 
             provider_response = ProviderResponse(
                 tenant_id=tenant_id,
@@ -95,6 +96,7 @@ class ModelProviderService:
                     current_credential_name=getattr(provider_config, "current_credential_name", None),
                     available_credentials=getattr(provider_config, "available_credentials", []),
                     custom_models=model_config,
+                    can_added_models=can_added_models,
                 ),
                 system_configuration=SystemConfigurationResponse(
                     enabled=provider_configuration.system_configuration.enabled,
@@ -152,7 +154,7 @@ class ModelProviderService:
         provider_configuration.validate_provider_credentials(credentials)
 
     def create_provider_credential(
-        self, tenant_id: str, provider: str, credentials: dict, credential_name: str
+        self, tenant_id: str, provider: str, credentials: dict, credential_name: str | None
     ) -> None:
         """
         Create and save new provider credentials.
@@ -172,7 +174,7 @@ class ModelProviderService:
         provider: str,
         credentials: dict,
         credential_id: str,
-        credential_name: str,
+        credential_name: str | None,
     ) -> None:
         """
         update a saved provider credential (by credential_id).
@@ -249,7 +251,7 @@ class ModelProviderService:
         )
 
     def create_model_credential(
-        self, tenant_id: str, provider: str, model_type: str, model: str, credentials: dict, credential_name: str
+        self, tenant_id: str, provider: str, model_type: str, model: str, credentials: dict, credential_name: str | None
     ) -> None:
         """
         create and save model credentials.
@@ -278,7 +280,7 @@ class ModelProviderService:
         model: str,
         credentials: dict,
         credential_id: str,
-        credential_name: str,
+        credential_name: str | None,
     ) -> None:
         """
         update model credentials.
@@ -380,7 +382,7 @@ class ModelProviderService:
         provider_configurations = self.provider_manager.get_configurations(tenant_id)
 
         # Get provider available models
-        models = provider_configurations.get_models(model_type=ModelType.value_of(model_type))
+        models = provider_configurations.get_models(model_type=ModelType.value_of(model_type), only_active=True)
 
         # Group models by provider
         provider_models: dict[str, list[ModelWithProviderEntity]] = {}
@@ -389,9 +391,6 @@ class ModelProviderService:
                 provider_models[model.provider.provider] = []
 
             if model.deprecated:
-                continue
-
-            if model.status != ModelStatus.ACTIVE:
                 continue
 
             provider_models[model.provider.provider].append(model)

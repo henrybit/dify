@@ -9,7 +9,7 @@ from collections import Counter
 from typing import Any, Literal, Optional
 
 from flask_login import current_user
-from sqlalchemy import func, select
+from sqlalchemy import exists, func, select
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import NotFound
 
@@ -133,7 +133,11 @@ class DatasetService:
 
         # Check if tag_ids is not empty to avoid WHERE false condition
         if tag_ids and len(tag_ids) > 0:
-            target_ids = TagService.get_target_ids_by_tag_ids("knowledge", tenant_id, tag_ids)
+            target_ids = TagService.get_target_ids_by_tag_ids(
+                "knowledge",
+                tenant_id,  # ty: ignore [invalid-argument-type]
+                tag_ids,
+            )
             if target_ids and len(target_ids) > 0:
                 query = query.where(Dataset.id.in_(target_ids))
             else:
@@ -655,10 +659,8 @@ class DatasetService:
 
     @staticmethod
     def dataset_use_check(dataset_id) -> bool:
-        count = db.session.query(AppDatasetJoin).filter_by(dataset_id=dataset_id).count()
-        if count > 0:
-            return True
-        return False
+        stmt = select(exists().where(AppDatasetJoin.dataset_id == dataset_id))
+        return db.session.execute(stmt).scalar_one()
 
     @staticmethod
     def check_dataset_permission(dataset, user):
@@ -1151,7 +1153,7 @@ class DocumentService:
                         "search_method": RetrievalMethod.SEMANTIC_SEARCH.value,
                         "reranking_enable": False,
                         "reranking_model": {"reranking_provider_name": "", "reranking_model_name": ""},
-                        "top_k": 2,
+                        "top_k": 4,
                         "score_threshold_enabled": False,
                     }
 
@@ -1614,7 +1616,7 @@ class DocumentService:
                 search_method=RetrievalMethod.SEMANTIC_SEARCH.value,
                 reranking_enable=False,
                 reranking_model=RerankingModel(reranking_provider_name="", reranking_model_name=""),
-                top_k=2,
+                top_k=4,
                 score_threshold_enabled=False,
             )
         # save dataset
@@ -2348,7 +2350,7 @@ class SegmentService:
     def delete_segments(cls, segment_ids: list, document: Document, dataset: Dataset):
         segments = (
             db.session.query(DocumentSegment.index_node_id, DocumentSegment.word_count)
-            .filter(
+            .where(
                 DocumentSegment.id.in_(segment_ids),
                 DocumentSegment.dataset_id == dataset.id,
                 DocumentSegment.document_id == document.id,
@@ -2363,7 +2365,9 @@ class SegmentService:
         index_node_ids = [seg.index_node_id for seg in segments]
         total_words = sum(seg.word_count for seg in segments)
 
-        document.word_count -= total_words
+        document.word_count = (
+            document.word_count - total_words if document.word_count and document.word_count > total_words else 0
+        )
         db.session.add(document)
 
         delete_segment_from_index_task.delay(index_node_ids, dataset.id, document.id)
@@ -2440,16 +2444,6 @@ class SegmentService:
         with redis_client.lock(lock_name, timeout=20):
             index_node_id = str(uuid.uuid4())
             index_node_hash = helper.generate_text_hash(content)
-            child_chunk_count = (
-                db.session.query(ChildChunk)
-                .where(
-                    ChildChunk.tenant_id == current_user.current_tenant_id,
-                    ChildChunk.dataset_id == dataset.id,
-                    ChildChunk.document_id == document.id,
-                    ChildChunk.segment_id == segment.id,
-                )
-                .count()
-            )
             max_position = (
                 db.session.query(func.max(ChildChunk.position))
                 .where(
