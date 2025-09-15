@@ -1,8 +1,8 @@
-import enum
 import importlib.util
 import json
 import logging
 import os
+from enum import StrEnum, auto
 from pathlib import Path
 from typing import Any, Optional
 
@@ -13,9 +13,9 @@ from core.helper.position_helper import sort_to_dict_by_position_map
 logger = logging.getLogger(__name__)
 
 
-class ExtensionModule(enum.Enum):
-    MODERATION = "moderation"
-    EXTERNAL_DATA_TOOL = "external_data_tool"
+class ExtensionModule(StrEnum):
+    MODERATION = auto()
+    EXTERNAL_DATA_TOOL = auto()
 
 
 class ModuleExtension(BaseModel):
@@ -34,7 +34,7 @@ class Extensible:
     tenant_id: str
     config: Optional[dict] = None
 
-    def __init__(self, tenant_id: str, config: Optional[dict] = None) -> None:
+    def __init__(self, tenant_id: str, config: Optional[dict] = None):
         self.tenant_id = tenant_id
         self.config = config
 

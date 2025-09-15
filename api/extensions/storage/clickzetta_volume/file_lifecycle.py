@@ -1,27 +1,27 @@
 """ClickZetta Volume file lifecycle management
 
 This module provides file lifecycle management features including version control,
-automatic cleanup, backup and restore. Supports complete lifecycle management for
-knowledge base files.
+automatic cleanup, backup and restore.
+Supports complete lifecycle management for knowledge base files.
 """
 
 import json
 import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum, auto
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
 
-class FileStatus(Enum):
+class FileStatus(StrEnum):
     """File status enumeration"""
 
-    ACTIVE = "active"  # Active status
-    ARCHIVED = "archived"  # Archived
-    DELETED = "deleted"  # Deleted (soft delete)
-    BACKUP = "backup"  # Backup file
+    ACTIVE = auto()  # Active status
+    ARCHIVED = auto()  # Archived
+    DELETED = auto()  # Deleted (soft delete)
+    BACKUP = auto()  # Backup file
 
 
 @dataclass
@@ -38,7 +38,7 @@ class FileMetadata:
     tags: Optional[dict[str, str]] = None
     parent_version: Optional[int] = None
 
-    def to_dict(self) -> dict:
+    def to_dict(self):
         """Convert to dictionary format"""
         data = asdict(self)
         data["created_at"] = self.created_at.isoformat()

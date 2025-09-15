@@ -105,7 +105,7 @@ class KnowledgeRetrievalNode(BaseNode):
         thread_pool_id: Optional[str] = None,
         *,
         llm_file_saver: LLMFileSaver | None = None,
-    ) -> None:
+    ):
         super().__init__(
             id=id,
             config=config,
@@ -125,7 +125,7 @@ class KnowledgeRetrievalNode(BaseNode):
             )
         self._llm_file_saver = llm_file_saver
 
-    def init_node_data(self, data: Mapping[str, Any]) -> None:
+    def init_node_data(self, data: Mapping[str, Any]):
         self._node_data = KnowledgeRetrievalNodeData.model_validate(data)
 
     def _get_error_strategy(self) -> Optional[ErrorStrategy]:
@@ -259,7 +259,7 @@ class KnowledgeRetrievalNode(BaseNode):
         )
         all_documents = []
         dataset_retrieval = DatasetRetrieval()
-        if node_data.retrieval_mode == DatasetRetrieveConfigEntity.RetrieveStrategy.SINGLE.value:
+        if node_data.retrieval_mode == DatasetRetrieveConfigEntity.RetrieveStrategy.SINGLE:
             # fetch model config
             if node_data.single_retrieval_config is None:
                 raise ValueError("single_retrieval_config is required")
@@ -291,7 +291,7 @@ class KnowledgeRetrievalNode(BaseNode):
                     metadata_filter_document_ids=metadata_filter_document_ids,
                     metadata_condition=metadata_condition,
                 )
-        elif node_data.retrieval_mode == DatasetRetrieveConfigEntity.RetrieveStrategy.MULTIPLE.value:
+        elif node_data.retrieval_mode == DatasetRetrieveConfigEntity.RetrieveStrategy.MULTIPLE:
             if node_data.multiple_retrieval_config is None:
                 raise ValueError("multiple_retrieval_config is required")
             if node_data.multiple_retrieval_config.reranking_mode == "reranking_model":
