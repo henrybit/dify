@@ -61,6 +61,10 @@ const translation = {
     selectAll: '모두 선택',
     deSelectAll: '모두 선택 해제',
     config: '구성',
+    no: '아니요',
+    yes: '네',
+    deleteConfirmTitle: '삭제하시겠습니까?',
+    confirmAction: '귀하의 행동을 확인해 주세요.',
   },
   placeholder: {
     input: '입력해주세요',
@@ -161,6 +165,7 @@ const translation = {
     github: '깃허브',
     compliance: '컴플라이언스',
     support: '지원',
+    contactUs: '문의하기',
   },
   settings: {
     accountGroup: '계정',

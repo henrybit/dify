@@ -67,6 +67,10 @@ const translation = {
     sure: 'Saya yakin',
     imageCopied: 'Gambar yang disalin',
     config: 'Konfigurasi',
+    deleteConfirmTitle: 'Hapus?',
+    confirmAction: 'Silakan konfirmasi tindakan Anda.',
+    yes: 'Ya',
+    no: 'Tidak',
   },
   errorMsg: {
     urlError: 'URL harus dimulai dengan http:// atau https://',
@@ -168,6 +172,7 @@ const translation = {
     about: 'Tentang',
     workspace: 'Workspace',
     createWorkspace: 'Membuat Ruang Kerja',
+    contactUs: 'Hubungi Kami',
   },
   compliance: {
     soc2Type2: 'Laporan SOC 2 Tipe II',

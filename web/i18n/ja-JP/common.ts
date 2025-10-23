@@ -67,6 +67,10 @@ const translation = {
     selectAll: 'すべて選択',
     deSelectAll: 'すべて選択解除',
     config: 'コンフィグ',
+    yes: 'はい',
+    no: 'いいえ',
+    deleteConfirmTitle: '削除しますか？',
+    confirmAction: '操作を確認してください。',
   },
   errorMsg: {
     fieldRequired: '{{field}}は必要です',
@@ -175,6 +179,7 @@ const translation = {
     about: 'Dify について',
     logout: 'ログアウト',
     github: 'GitHub',
+    contactUs: 'お問い合わせ',
   },
   compliance: {
     soc2Type1: 'SOC 2 Type I 報告書',

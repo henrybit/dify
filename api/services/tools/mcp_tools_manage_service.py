@@ -188,6 +188,8 @@ class MCPToolManageService:
             raise
 
         user = mcp_provider.load_user()
+        if not mcp_provider.icon:
+            raise ValueError("MCP provider icon is required")
         return ToolProviderApiEntity(
             id=mcp_provider.id,
             name=mcp_provider.name,
@@ -306,7 +308,7 @@ class MCPToolManageService:
         provider_controller = MCPToolProviderController.from_db(mcp_provider)
         tool_configuration = ProviderConfigEncrypter(
             tenant_id=mcp_provider.tenant_id,
-            config=list(provider_controller.get_credentials_schema()),  # ty: ignore [invalid-argument-type]
+            config=list(provider_controller.get_credentials_schema()),
             provider_config_cache=NoOpProviderCredentialCache(),
         )
         credentials = tool_configuration.encrypt(credentials)

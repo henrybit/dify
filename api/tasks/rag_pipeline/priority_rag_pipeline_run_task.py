@@ -16,7 +16,7 @@ from core.app.entities.app_invoke_entities import InvokeFrom, RagPipelineGenerat
 from core.app.entities.rag_pipeline_invoke_entities import RagPipelineInvokeEntity
 from core.repositories.factory import DifyCoreRepositoryFactory
 from extensions.ext_database import db
-from models.account import Account, Tenant
+from models import Account, Tenant
 from models.dataset import Pipeline
 from models.enums import WorkflowRunTriggeredFrom
 from models.workflow import Workflow, WorkflowNodeExecutionTriggeredFrom
@@ -79,7 +79,7 @@ def run_single_rag_pipeline_task(rag_pipeline_invoke_entity: Mapping[str, Any], 
     # Create Flask application context for this thread
     with flask_app.app_context():
         try:
-            rag_pipeline_invoke_entity_model = RagPipelineInvokeEntity(**rag_pipeline_invoke_entity)
+            rag_pipeline_invoke_entity_model = RagPipelineInvokeEntity.model_validate(rag_pipeline_invoke_entity)
             user_id = rag_pipeline_invoke_entity_model.user_id
             tenant_id = rag_pipeline_invoke_entity_model.tenant_id
             pipeline_id = rag_pipeline_invoke_entity_model.pipeline_id
@@ -112,7 +112,7 @@ def run_single_rag_pipeline_task(rag_pipeline_invoke_entity: Mapping[str, Any], 
                     workflow_execution_id = str(uuid.uuid4())
 
                 # Create application generate entity from dict
-                entity = RagPipelineGenerateEntity(**application_generate_entity)
+                entity = RagPipelineGenerateEntity.model_validate(application_generate_entity)
 
                 # Create workflow repositories
                 session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)

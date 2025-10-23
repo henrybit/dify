@@ -61,6 +61,10 @@ const translation = {
     selectAll: 'सभी चुनें',
     deSelectAll: 'सभी चयन हटाएँ',
     config: 'कॉन्फ़िगरेशन',
+    no: 'नहीं',
+    yes: 'हाँ',
+    deleteConfirmTitle: 'हटाएं?',
+    confirmAction: 'कृपया अपनी क्रिया की पुष्टि करें।',
   },
   errorMsg: {
     fieldRequired: '{{field}} आवश्यक है',
@@ -174,6 +178,7 @@ const translation = {
     compliance: 'अनुपालन',
     github: 'गिटहब',
     support: 'समर्थन',
+    contactUs: 'संपर्क करें',
   },
   settings: {
     accountGroup: 'खाता',

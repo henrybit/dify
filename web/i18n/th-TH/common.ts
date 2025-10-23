@@ -61,6 +61,10 @@ const translation = {
     selectAll: 'เลือกทั้งหมด',
     deSelectAll: 'ยกเลิกการเลือกทั้งหมด',
     config: 'การตั้งค่า',
+    no: 'ไม่',
+    deleteConfirmTitle: 'ลบหรือไม่?',
+    confirmAction: 'กรุณายืนยันการกระทำของคุณ',
+    yes: 'ใช่',
   },
   errorMsg: {
     fieldRequired: '{{field}} เป็นสิ่งจําเป็น',
@@ -164,6 +168,7 @@ const translation = {
     github: 'GitHub',
     compliance: 'การปฏิบัติตามข้อกำหนด',
     support: 'การสนับสนุน',
+    contactUs: 'ติดต่อเรา',
   },
   settings: {
     accountGroup: 'ทั่วไป',
