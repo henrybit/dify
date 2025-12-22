@@ -218,7 +218,7 @@ class PluginConfig(BaseSettings):
 
     PLUGIN_DAEMON_TIMEOUT: PositiveFloat | None = Field(
         description="Timeout in seconds for requests to the plugin daemon (set to None to disable)",
-        default=300.0,
+        default=600.0,
     )
 
     INNER_API_KEY_FOR_PLUGIN: str = Field(description="Inner api key for plugin", default="inner-api-key")
@@ -378,6 +378,37 @@ class FileUploadConfig(BaseSettings):
     ATTACHMENT_IMAGE_DOWNLOAD_TIMEOUT: NonNegativeInt = Field(
         description="Timeout for downloading image attachments in seconds",
         default=60,
+    )
+
+    # Annotation Import Security Configurations
+    ANNOTATION_IMPORT_FILE_SIZE_LIMIT: NonNegativeInt = Field(
+        description="Maximum allowed CSV file size for annotation import in megabytes",
+        default=2,
+    )
+
+    ANNOTATION_IMPORT_MAX_RECORDS: PositiveInt = Field(
+        description="Maximum number of annotation records allowed in a single import",
+        default=10000,
+    )
+
+    ANNOTATION_IMPORT_MIN_RECORDS: PositiveInt = Field(
+        description="Minimum number of annotation records required in a single import",
+        default=1,
+    )
+
+    ANNOTATION_IMPORT_RATE_LIMIT_PER_MINUTE: PositiveInt = Field(
+        description="Maximum number of annotation import requests per minute per tenant",
+        default=5,
+    )
+
+    ANNOTATION_IMPORT_RATE_LIMIT_PER_HOUR: PositiveInt = Field(
+        description="Maximum number of annotation import requests per hour per tenant",
+        default=20,
+    )
+
+    ANNOTATION_IMPORT_MAX_CONCURRENT: PositiveInt = Field(
+        description="Maximum number of concurrent annotation import tasks per tenant",
+        default=2,
     )
 
     inner_UPLOAD_FILE_EXTENSION_BLACKLIST: str = Field(
@@ -1221,19 +1252,9 @@ class WorkflowLogConfig(BaseSettings):
 
 
 class SwaggerUIConfig(BaseSettings):
-    """
-    Configuration for Swagger UI documentation.
-
-    Security Note: Swagger UI is automatically disabled in PRODUCTION environment
-    to prevent API information disclosure. Set SWAGGER_UI_ENABLED=true explicitly
-    to enable in production if needed.
-    """
-
-    SWAGGER_UI_ENABLED: bool | None = Field(
-        description="Whether to enable Swagger UI in api module. "
-        "Automatically disabled in PRODUCTION environment for security. "
-        "Set to true explicitly to enable in production.",
-        default=None,
+    SWAGGER_UI_ENABLED: bool = Field(
+        description="Whether to enable Swagger UI in api module",
+        default=True,
     )
 
     SWAGGER_UI_PATH: str = Field(
@@ -1241,28 +1262,26 @@ class SwaggerUIConfig(BaseSettings):
         default="/swagger-ui.html",
     )
 
-    @property
-    def swagger_ui_enabled(self) -> bool:
-        """
-        Compute whether Swagger UI should be enabled.
-
-        If SWAGGER_UI_ENABLED is explicitly set, use that value.
-        Otherwise, disable in PRODUCTION environment for security.
-        """
-        if self.SWAGGER_UI_ENABLED is not None:
-            return self.SWAGGER_UI_ENABLED
-
-        # Auto-disable in production environment
-        import os
-
-        deploy_env = os.environ.get("DEPLOY_ENV", "PRODUCTION")
-        return deploy_env.upper() != "PRODUCTION"
-
 
 class TenantIsolatedTaskQueueConfig(BaseSettings):
     TENANT_ISOLATED_TASK_CONCURRENCY: int = Field(
         description="Number of tasks allowed to be delivered concurrently from isolated queue per tenant",
         default=1,
+    )
+
+
+class SandboxExpiredRecordsCleanConfig(BaseSettings):
+    SANDBOX_EXPIRED_RECORDS_CLEAN_GRACEFUL_PERIOD: NonNegativeInt = Field(
+        description="Graceful period in days for sandbox records clean after subscription expiration",
+        default=21,
+    )
+    SANDBOX_EXPIRED_RECORDS_CLEAN_BATCH_SIZE: PositiveInt = Field(
+        description="Maximum number of records to process in each batch",
+        default=1000,
+    )
+    SANDBOX_EXPIRED_RECORDS_RETENTION_DAYS: PositiveInt = Field(
+        description="Retention days for sandbox expired workflow_run records and message records",
+        default=30,
     )
 
 
@@ -1291,6 +1310,7 @@ class FeatureConfig(
     PositionConfig,
     RagEtlConfig,
     RepositoryConfig,
+    SandboxExpiredRecordsCleanConfig,
     SecurityConfig,
     TenantIsolatedTaskQueueConfig,
     ToolConfig,
