@@ -25,7 +25,7 @@ env:
 jobs:
   build:
     runs-on: ${{ matrix.runs_on }}
-    if: github.repository == 'langgenius/dify'
+    if: github.repository == 'henrybit/dify'
     strategy:
       matrix:
         include:
@@ -111,7 +111,7 @@ jobs:
   create-manifest:
     needs: build
     runs-on: ubuntu-latest
-    if: github.repository == 'langgenius/dify'
+    if: github.repository == 'henrybit/dify'
     strategy:
       matrix:
         include:
